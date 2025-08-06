@@ -45,16 +45,18 @@ spec:
       port: 80 # service port
       targetPort: 80 # container port
 ---
-apiVersion: networking.k8s.io/v1
+apiVersion: networking.k8s.ioeks/v1
 kind: Ingress
 metadata:
   name: app1
-  annotations:
-    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS": 443}]'
-    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:351818465616:certificate/0c55f469-a47f-44b5-b7be-9bab14b49824
-    alb.ingress.kubernetes.io/scheme: internet-facing
-    alb.ingress.kubernetes.io/target-type: ip
-    alb.ingress.kubernetes.io/group.name: roboshop-ingress # replace with your group name
+ annotations:
+  alb.ingress.kubernetes.io/scheme: internet-facing
+  alb.ingress.kubernetes.io/target-type: ip
+  alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS": 443}]'
+  alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:351818465616:certificate/0c55f469-a47f-44b5-b7be-9bab14b49824
+  alb.ingress.kubernetes.io/group.name: roboshop-ingress
+  alb.ingress.kubernetes.io/healthcheck-path: /
+
 spec:
   ingressClassName: alb
   rules:
