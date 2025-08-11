@@ -1,0 +1,93 @@
+
+## Project Overview
+
+This project demonstrates how to set up an **Ingress Controller** in Kubernetes for two applications, showcasing the difference between a **Classic Load Balancer (CLB)** and an **Application Load Balancer (ALB)** on AWS.  
+The key highlight is understanding how an Application Load Balancer is more intelligent and flexible compared to the traditional Classic Load Balancer, by routing traffic efficiently at the application layer.
+
+---
+
+## Workflow and Setup Instructions
+
+### 1. Provision EC2 Instance with Docker
+
+- The project uses a Terraform script located in the `docker` repository.  
+- Run the `main.tf` file to provision an EC2 instance on AWS.  
+- Attach an **IAM Role** to the EC2 instance to grant the necessary AWS access permissions.
+
+### 2. Clone the Kubernetes Ingress Repository
+
+- SSH into the EC2 instance.  
+- Clone the `k8-ingress` repository which contains the manifests and setup files for ingress.
+
+```bash
+git clone https://github.com/Nallagachu/k8-ingress.git
+````
+
+### 3. Setup Kubernetes Cluster
+
+* Create a Kubernetes cluster on the EC2 instance using `eksctl` (or `iksctl` if using IBM Cloud Kubernetes Service):
+
+```bash
+iksctl create cluster -f iks.img
+```
+
+* This command provisions the Kubernetes cluster where the ingress controller and applications will run.
+
+### 4. Deploy Application 1 (app1)
+
+* Navigate to the `app1` directory inside the cloned `k8-ingress` repo:
+
+```bash
+cd k8-ingress/app1
+```
+
+* Apply the Kubernetes manifest file to deploy the app and configure the ingress/load balancer:
+
+```bash
+kubectl apply -f app1.yaml
+```
+
+* This will set up the necessary resources including the ingress which will integrate with the load balancer.
+
+### 5. Deploy Application 2 (app2)
+
+* Similarly, navigate to the `app2` directory:
+
+```bash
+cd ../app2
+```
+
+* Apply the manifest for the second application:
+
+```bash
+kubectl apply -f app2.yaml
+```
+
+### 6. Access and Verify
+
+* After deployment, verify the ingress controller is managing traffic for both apps via the Application Load Balancer.
+* You can compare this behavior with a Classic Load Balancer to understand how ALB intelligently routes traffic based on HTTP/HTTPS rules and paths.
+
+---
+
+## Summary
+
+* **Classic Load Balancer (CLB):** Operates at the transport layer (TCP/SSL), supports basic load balancing.
+* **Application Load Balancer (ALB):** Operates at the application layer (HTTP/HTTPS), supports path-based routing, host-based routing, and advanced routing features which improve traffic management.
+
+---
+
+## Prerequisites
+
+* AWS account with permissions to create EC2, IAM Roles, and Kubernetes clusters.
+* Terraform installed locally or on EC2 instance.
+* `kubectl` and `eksctl`/`iksctl` installed for Kubernetes management.
+
+---
+
+## Notes
+
+* Make sure your EC2 instance has the correct IAM role attached to allow Kubernetes and AWS API interactions.
+* The manifests for app1 and app2 include the ingress resource configuration to use ALB.
+* This project helps understand how Kubernetes ingress and AWS ALB integration improves load balancing for microservices.
+
