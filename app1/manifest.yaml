@@ -45,7 +45,7 @@ spec:
       port: 80 # service port
       targetPort: 80 # container port
 ---
-apiVersion: networking.k8s.ioeks/v1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: app1
